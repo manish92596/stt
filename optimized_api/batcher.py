@@ -48,13 +48,19 @@ class CoalescingBatcher:
             t0 = time.time()
             print([x[2] for x in batch])
             try:
-                out = await loop.run_in_executor(_executor, partial(
-                    self.model.transcribe, tmp_files,
-                    lang_codes=[x[2] for x in batch],
-                    tasks=['transcribe'] * len(tmp_files),
-                    initial_prompts=[None] * len(tmp_files),
-                    batch_size=min(24, len(tmp_files))
-                ))
+                try:
+                    out = await loop.run_in_executor(_executor, partial(
+                        self.model.transcribe, tmp_files,
+                        lang_codes=[x[2] for x in batch],
+                        tasks=['transcribe'] * len(tmp_files),
+                        initial_prompts=[None] * len(tmp_files),
+                        batch_size=min(24, len(tmp_files))
+                    ))
+                except Exception as e:
+                    for _, fut, _ in batch:
+                        if not fut.done():
+                            fut.set_exception(e)
+                    continue
             finally:
                 for f in tmp_files:
                     try:

@@ -24,12 +24,15 @@ def get_model(repo_id: str):
             snapshot_download(repo_id=repo_id, local_dir=local_dir)
 
     print("Loading CTranslate2 model...")
+    # n_mels must match what the model was trained on: 128 for whisper-large-v3 / large-v3-turbo,
+    # 80 for everything else (medium, small, and most fine-tunes including zero-stt-hinglish).
+    n_mels = 128 if ("large-v3" in repo_id) else 80
     model = whisper_s2t.load_model(
         local_dir,
         backend='CTranslate2',
         device='cuda',
         compute_type='float16',
-        n_mels=128,
+        n_mels=n_mels,
         asr_options=BEST_ASR_CONFIG
     )
     CACHE[repo_id] = model
