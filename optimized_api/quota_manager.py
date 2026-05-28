@@ -29,6 +29,7 @@ class GPUQuotaManager:
                         {"model_id": m, "hugging_face_repo_id": m}
                         for m in [
                             "/home/inference/models/zero-stt-hinglish-ct2",
+                            "/home/models/zero-stt-hinglish-ct2",
                             "shunyalabs/zero-stt-hinglish",
                             "openai/whisper-large-v3-turbo",
                             "openai/whisper-large-v3",
