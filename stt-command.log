@@ -1,0 +1,125 @@
+
+
+
+
+
+
+
+
+
+pip install --no-build-isolation openai-whisper==20240930
+
+pip install --no-build-isolation git+https://github.com/LATICE-AI/whisper-s2t.git
+
+
+
+
+may be bild open ai 
+
+pip install openai-whisper --no-build-isolation
+pip install git+https://github.com/LATICE-AI/whisper-s2t.git --no-deps
+
+
+
+
+
+
+
+
+
+ot@1ce8a9f7aa9c:~# history 100
+    1  cd /home
+    2  git clone https://github.com/LATICE-AI/inference.git
+    3  conda activate py3.10
+    4  pip install torch==2.5.1 torchaudio==2.5.1 --index-url https://download.pytorch.org/whl/cu124
+    5  pip install fastapi uvicorn huggingface-hub pydantic python-multipart silero-vad websockets requests numpy ctranslate2 transformers
+    6  pip install git+https://github.com/LATICE-AI/whisper-s2t.git
+    7  pip install nvidia-cudnn-cu12==9.*
+    8  pip install setuptools
+    9  pip install git+https://github.com/LATICE-AI/whisper-s2t.git
+   10  pip install -U setuptools && pip install git+https://github.com/LATICE-AI/whisper-s2t.git
+   11  pip install "setuptools<70.0.0" setuptools-scm
+   12  pip install git+https://github.com/LATICE-AI/whisper-s2t.git
+   13  pip install "setuptools<70.0.0" setuptools-scm
+   14  pip install --no-build-isolation git+https://github.com
+   15  pip install --no-build-isolation openai-whisper==20240930
+   16  pip install --no-build-isolation git+https://github.com/LATICE-AI/whisper-s2t.git
+   17  history 100
+root@1ce8a9f7aa9c:~#
+
+
+
+
+
+
+
+
+
+
+# 1. Update the outdated package repositories
+apt-get update
+
+# 2. Install ffmpeg
+apt-get install -y ffmpeg
+
+# 3. Kill any hung server processes and restart your API
+lsof -ti:6006 | xargs kill -9 2>/dev/null
+cd ~/inference
+export LD_LIBRARY_PATH=/root/miniconda3/envs/py3.10/lib/python3.10/site-packages/nvidia/cudnn/lib:$LD_LIBRARY_PATH
+python optimized_api/main.py
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+apt-get update
+apt-get install -y ffmpeg
+pip install openai-whisper --no-build-isolation
+pip install git+https://github.com/LATICE-AI/whisper-s2t.git --no-deps
+sed -i 's|/home/inference/models/zero-stt-hinglish-ct2|/home/models/zero-stt-hinglish-ct2|g' ~/inference/optimized_api/quota_manager.py
+mkdir -p ~/models
+ct2-transformers-converter --model shunyalabs/zero-stt-hinglish --output_dir ~/models/zero-stt-hinglish-ct2 --quantization float16 --force
+cd ~/models/zero-stt-hinglish-ct2
+wget https://huggingface.co/shunyalabs/zero-stt-hinglish/resolve/main/tokenizer.json
+wget https://huggingface.co/shunyalabs/zero-stt-hinglish/resolve/main/vocab.json
+wget https://huggingface.co/shunyalabs/zero-stt-hinglish/resolve/main/merges.txt
+wget https://huggingface.co/shunyalabs/zero-stt-hinglish/resolve/main/added_tokens.json
+wget https://huggingface.co/shunyalabs/zero-stt-hinglish/resolve/main/special_tokens_map.json
+wget https://huggingface.co/shunyalabs/zero-stt-hinglish/resolve/main/preprocessor_config.json
+lsof -ti:6006 | xargs kill -9 2>/dev/null
+cd ~/inference
+export LD_LIBRARY_PATH=/root/miniconda3/envs/py3.10/lib/python3.10/site-packages/nvidia/cudnn/lib:$LD_LIBRARY_PATH
+python optimized_api/main.py
+
+
+
+
+
+
+
+
+
+
+
+curl -X POST "http://localhost:6006/transcribe" \
+  -H "api-key: any-key-works" \
+  -H "model-id: /home/models/zero-stt-hinglish-ct2" \
+  -H "language: hi" \
+  -F "audio_file=@/home/demo.wav"
