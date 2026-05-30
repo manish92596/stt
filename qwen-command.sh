@@ -527,7 +527,7 @@ qwen3_template.jinja
 
 
  source vllm_env/bin/activate
-
+pip install --upgrade pip
 
  pip install --upgrade vllm
 
