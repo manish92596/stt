@@ -1,0 +1,1153 @@
+ 1007      print(d.get("schedule_id"), d.get("schedule_date"), d.get("schedule_time"), "due=", _is_due(d, horizon), "err=", d.get("last_error"))
+ 1008  PY'
+ 1009  docker stop techladder-dialer-staging
+ 1010  docker rm techladder-dialer-staging
+ 1011  docker build -t techladder-dialer-staging .
+ 1012  docker run -d --env-file .env.stage --network host --name techladder-dialer-staging techladder-dialer-staging:latest
+ 1013  docker exec -it techladder-dialer-staging bash -lc 'python3 - <<PY
+ 1014  from datetime import timedelta
+ 1015  from pymongo import MongoClient
+ 1016  from utils.env_utils import get_mongo_uri, get_mongo_db_name, get_schedule_collection_name, load_stack_env
+ 1017  from utils.time_utils import utc_now
+ 1018  from scheduler.scheduler_listener import _parse_schedule_datetime_utc, _is_due, _claimable_schedule_filter
+ 1019  load_stack_env("stage", override=False)
+ 1020  client = MongoClient(get_mongo_uri())
+ 1021  col = client[get_mongo_db_name()][get_schedule_collection_name("schedule_call_phaseone")]
+ 1022  horizon = utc_now() + timedelta(seconds=90)
+ 1023  for d in col.find(_claimable_schedule_filter(), {"schedule_id":1,"schedule_date":1,"schedule_time":1,"status":1,"status_overall":1,"last_error":1}).sort([("schedule_date",1),("schedule_time",1),("created_at",1)]).limit(15):
+ 1024      print(d.get("schedule_id"), d.get("schedule_date"), d.get("schedule_time"), "due=", _is_due(d, horizon), "err=", d.get("last_error"))
+ 1025  PY'
+ 1026  lk sip outbound list 
+ 1027  lk sip outbound list
+ 1028  cd app/techladder-dialer/
+ 1029  git branch 
+ 1030  git log -1 --oneline 
+ 1031  git status
+ 1032  git stash 
+ 1033  git pull
+ 1034  git branch 
+ 1035  git log -1 --oneline 
+ 1036  docker stop techladder-dialer-staging-dialer-1
+ 1037  docker rm techladder-dialer-staging-dialer-1
+ 1038  docker build -t techladder-dialer-staging-dialer-1 .
+ 1039  docker run -d --env-file .env.stage --network host --name techladder-dialer-staging-dialer-1 techladder-dialer-staging-dialer-1:latest
+ 1040  docker ps
+ 1041  lk sip outbound list 
+ 1042  tmux attach -t staging 
+ 1043  cd app/
+ 1044  tmux ls
+ 1045  docker exec -it techladder-dialer-staging bash
+ 1046  docker logs
+ 1047  docker logs techladder-dialer-staging 
+ 1048  docker logs -f techladder-dialer-staging 
+ 1049  cd app/techladder-dialer/
+ 1050  git status
+ 1051  git pull
+ 1052  docker exec -it techladder-dialer-staging tail -f  "/app/sqs_logs/worker-main.log" >> error1_worker.log
+ 1053  pwd
+ 1054  ls
+ 1055  cat error1_worker.log 
+ 1056  cd app/worker-test/
+ 1057  docker exec -it techladder-dialer-staging tail -f  "/app/sqs_logs/worker-main.log" >> error1_worker.log
+ 1058  ls
+ 1059  docker exec -it techladder-dialer-staging tail -f  "/app/sqs_logs/worker-main.log"
+ 1060  docker exec -it techladder-dialer-staging tail -f  "/app/sqs_logs/worker-main.log" >> error1_worker.log
+ 1061  cd app/
+ 1062  ls
+ 1063  cd worker-test/
+ 1064  ls
+ 1065  docker ps
+ 1066  docker exec -it techladder-dialer-staging cat "/app/sqs_logs/scheduler-main.log"
+ 1067  docker exec -it techladder-dialer-staging tail -f  "/app/sqs_logs/scheduler-main.log"
+ 1068  docker exec -it techladder-dialer-staging tail -f  "/app/sqs_logs/scheduler-main.log" >> error1_lister.log
+ 1069  docker ps
+ 1070  docker stop a31fa55db605
+ 1071  docker rm a31fa55db605
+ 1072  docker ps 
+ 1073  cd app/techladder-agents/
+ 1074  git branch
+ 1075  git log -5 --oneline 
+ 1076  git branch 
+ 1077  git checkout alternate number 
+ 1078  git checkout alternate_number
+ 1079  git pull
+ 1080  git checkout main
+ 1081  git pull
+ 1082  git branch 
+ 1083  git log -1 --oneline 
+ 1084  git branch 
+ 1085  git checkout staging 
+ 1086  git pull
+ 1087  git branch --set-upstream-to=origin/staging staging
+ 1088  git pull
+ 1089  git log -1 --oneline 
+ 1090  cd app/techladder-dialer/
+ 1091  git branch 
+ 1092  git pull
+ 1093  tmux ls 
+ 1094  tmux attach -t staging 
+ 1095  cd Trunks/
+ 1096  lk sip outbound list
+ 1097  bash ./create_trunks.json 
+ 1098  docker ps
+ 1099  docker logs livekit-sip-1 --tail 100 -f
+ 1100  sudo iptables -A INPUT -s 5.196.63.60 -j DROP
+ 1101  sudo iptables -A INPUT -s 31.70.75.115 -j DROP
+ 1102  sudo iptables -A INPUT -s 87.98.242.75 -j DROP
+ 1103  sudo iptables -A INPUT -s 104.194.135.86 -j DROP
+ 1104  sudo iptables -A INPUT -s 107.189.24.53 -j DROP
+ 1105  sudo apt install iptables-persistent -y
+ 1106  sudo netfilter-persistent save
+ 1107  # Confirm all attacker IPs are blocked
+ 1108  sudo iptables -L INPUT -n | grep DROP
+ 1109  find / -name "sip.yaml" 2>/dev/null
+ 1110  find / -name "livekit.yaml" 2>/dev/null
+ 1111  cd Tru
+ 1112  cd Trunks/
+ 1113  sudo chown ubuntu:ubuntu livekit.yaml
+ 1114  cd ..
+ 1115  cd Livekit/
+ 1116  sudo chown ubuntu:ubuntu livekit.yaml
+ 1117  docker ps
+ 1118  docker compose down
+ 1119  docker compose up -d
+ 1120  docker compose -f docker-compose.stag.yml down
+ 1121  docker compose -f docker-compose.stag.yml up -d
+ 1122  docker ps
+ 1123  docker logs livekit-sip-1 --tail 50 -f
+ 1124  lk sip outbound list 
+ 1125  lk sip outbound list
+ 1126  cd Trunks/
+ 1127  bash ./create_trunks.json 
+ 1128  lk sip outbound list
+ 1129  bash ./create_trunks.json 
+ 1130  sudo sngrep
+ 1131  tmux attach -t staging 
+ 1132  lk sip outbound list 
+ 1133  sudo sngrep
+ 1134  cd Livekit/
+ 1135  docker compose -f docker-compose.stag.yml down
+ 1136  docker compose -f docker-compose.stag.yml up -d
+ 1137  docker ps
+ 1138  lk sip outbound list 
+ 1139  cd Trunks/
+ 1140  bash ./create_trunks.json 
+ 1141  lk sip outbound list 
+ 1142  docker ps
+ 1143  cd ..
+ 1144  cd app/techladder-dialer/
+ 1145  git branch 
+ 1146  git log -2 --oneline
+ 1147  git branch 
+ 1148  git log -10 --oneline
+ 1149  git stash 
+ 1150  git log -10 --oneline
+ 1151  docker ps
+ 1152  git log -1 --oneline 
+ 1153  git branch 
+ 1154  docker stop techladder-dialer-staging-dialer-1
+ 1155  docker rm techladder-dialer-staging-dialer-1
+ 1156  docker stop techladder-dialer-staging
+ 1157  docker rm techladder-dialer-staging
+ 1158  docke ps
+ 1159  docker ps
+ 1160  docker build -t techladder-dialer-stage .
+ 1161  docker run -d --env-file .env.stage --network host --name techladder-dialer-stage techladder-dialer-stage:latest
+ 1162  git log -1 --oneline 
+ 1163  docker ps
+ 1164  docker stop techladder-dialer-stage
+ 1165  docker rm techladder-dialer-stage
+ 1166  docker ps
+ 1167  docker stop techladder-dialer-staging-dialer-1
+ 1168  docker rm techladder-dialer-staging-dialer-1
+ 1169  docker build -t techladder-dialer-staging-dialer-1 .
+ 1170  docker run -d --env-file .env.stage --network host --name techladder-dialer-staging-dialer-1 techladder-dialer-staging-dialer-1:latest
+ 1171  docker ps
+ 1172  git branch 
+ 1173  git log -1 --oneline
+ 1174  git branch 
+ 1175  docker ps
+ 1176  docker stop 851e7f3072e9
+ 1177  docker rm 851e7f3072e9
+ 1178  docker ps
+ 1179  git log -1 --oneline
+ 1180  docker ps
+ 1181  cd app/techladder-agents/vaarti/
+ 1182  soruce .venv/bin/activate
+ 1183  source .venv/bin/activate
+ 1184  python3 main.py download-files
+ 1185  python3 main.py start > logs.log 2>&1
+ 1186  git branch 
+ 1187  git pull
+ 1188  python3 main.py start > logs.log 2>&1
+ 1189  clear
+ 1190  python3 main.py start > logs.log 2>&1
+ 1191  git branch 
+ 1192  git pull
+ 1193  git stahs 
+ 1194  git stash 
+ 1195  git pull
+ 1196  python3 main.py start > logs.log 2>&1
+ 1197  clear
+ 1198  python3 main.py start > logs.log 2>&1
+ 1199  pip install ten-vad
+ 1200  python3 main.py start > logs.log 2>&1
+ 1201  python3 main.py download-files
+ 1202  python3 main.py start > logs.log 2>&1
+ 1203  clear
+ 1204  ls
+ 1205  python3 main.py start > logs.log 2>&1
+ 1206  clear
+ 1207  python3 main.py start > logs.log 2>&1
+ 1208  git stash 
+ 1209  python3 main.py start > logs.log 2>&1
+ 1210  git branch 
+ 1211  git stash 
+ 1212  git checkout staging 
+ 1213  git pull
+ 1214  git branch 
+ 1215  git pull
+ 1216  git branch 
+ 1217  git log -2 --oneline 
+ 1218  git pull
+ 1219  git stash 
+ 1220  git checkout main 
+ 1221  git pull
+ 1222  git checkout staging 
+ 1223  python3 main.py start > logs.log 2>&1
+ 1224  git stash 
+ 1225  git branch 
+ 1226  git pull
+ 1227  python3 main.py start > logs.log 2>&1
+ 1228  git branch 
+ 1229  git stash 
+ 1230  git pull
+ 1231  git log -1 --oneline 
+ 1232  python3 main.py start > logs.log 2>&1
+ 1233  git fetch origin
+ 1234  git checkout alt_num2
+ 1235  git checkout alt-num2
+ 1236  git pull
+ 1237  python3 main.py start > logs.log 2>&1
+ 1238  git pull
+ 1239  python3 main.py start > logs.log 2>&1
+ 1240  git stash 
+ 1241  git checkout stagign
+ 1242  git checkout staging
+ 1243  git pull
+ 1244  git log -1 --oneline
+ 1245  git pull
+ 1246  python3 main.py start > logs.log 2>&1
+ 1247  git stash
+ 1248  git pull
+ 1249  python3 main.py start > logs.log 2>&1
+ 1250  tmux attach -t staging
+ 1251  lk sip outbound list
+ 1252  tmux ls
+ 1253  tmux new -s staging
+ 1254  cd app/techladder-agents/vaarti/
+ 1255  ls -l
+ 1256  ls -a
+ 1257  git stash 
+ 1258  lk sip outbound list
+ 1259  docke rps
+ 1260  docker ps
+ 1261  cd app/techladder-dialer/
+ 1262  docker ps
+ 1263  docker stop techladder-dialer-staging-dialer-1
+ 1264  docker rm techladder-dialer-staging-dialer-1
+ 1265  docker ps
+ 1266  git branch 
+ 1267  git log -1 --oneline
+ 1268  docker ps
+ 1269  git log -1 --oneline 
+ 1270  git pull
+ 1271  docker stop techladder-dialer-staging-dialer-1
+ 1272  docker rm techladder-dialer-staging-dialer-1
+ 1273  git stash list 
+ 1274  docker ps
+ 1275  git stash list 
+ 1276  cd app/techladder-agents/vaarti/
+ 1277  source .venv/bin/activate
+ 1278  python3 main.py start > logs.log 2>&1
+ 1279  git fetch origin
+ 1280  git stash
+ 1281  git checkout post-call-prompt
+ 1282  python3 main.py start > logs.log 2>&1
+ 1283  cd /home/ubuntu/app/techladder-agents/vaarti
+ 1284  source .venv/bin/activate && python3 main.py start > logs.log 2>&1
+ 1285  docker ps
+ 1286  tmxu ls
+ 1287  tmux ls
+ 1288  cd app/techladder-agents/
+ 1289  cd vaarti/
+ 1290  git branch 
+ 1291  tmux attach -t staging
+ 1292  tmux ls
+ 1293  cd app/techladder-dialer/
+ 1294  git stash list
+ 1295  docker ps
+ 1296  giot branch 
+ 1297  git branch 
+ 1298  docker ps
+ 1299  cd ..
+ 1300  cd techladder-agents/
+ 1301  cd vaarti/
+ 1302  pwd
+ 1303  cd agent_runtime/
+ 1304  pwd
+ 1305  cd app/techladder-agents/
+ 1306  cd vaarti/
+ 1307  git branch 
+ 1308  tmux ls
+ 1309  tmux kill-session -t staging
+ 1310  tmux ls
+ 1311  tmux attach -t staging 
+ 1312  tmux ls
+ 1313  tmux attach -t staging 
+ 1314  tmux ls
+ 1315  tmux attach -t staging 
+ 1316  tmux kill-session -t staging
+ 1317  tmux new -s staging 
+ 1318  git branch
+ 1319  python3 -c "import livekit.api; print(dir(livekit.api))"
+ 1320  lk sip outbound list
+ 1321  cd app/techladder-dialer/
+ 1322  git branch 
+ 1323  docker ps
+ 1324  git fetch origin
+ 1325  git checkout overwrite 
+ 1326  docker stop techladder-dialer-staging
+ 1327  docker rm techladder-dialer-staging
+ 1328  docker build -t techladder-dialer-staging .
+ 1329  docker run -d --env-file .env.stage --network host --name techladder-dialer-staging techladder-dialer-staging:latest
+ 1330  docker ps
+ 1331  docker logs -f 64218e1d1c96
+ 1332  tmux attach -t staging
+ 1333  docker ps
+ 1334  cd app/
+ 1335  ls -l
+ 1336  git clone https://github.com/shaurya30-ops/Pipecat-dev.git
+ 1337  git checkout phone_input
+ 1338  cd Pipecat-dev/
+ 1339  git checkout phone_input
+ 1340  tmux ls
+ 1341  tmux new -s multiagent
+ 1342  lk sip outbound list
+ 1343  tmux attach -t staging
+ 1344  tmux ls
+ 1345  lk sip outbound list 
+ 1346  tmxu attach -t staging
+ 1347  tmux attach -t staging
+ 1348  clear
+ 1349  ls
+ 1350  cd Livekit/
+ 1351  lk sip out list
+ 1352  ls
+ 1353  cat docker-compose.stag.yml 
+ 1354  cat livekit.yaml 
+ 1355  ls
+ 1356  cat sip.conf 
+ 1357  clear
+ 1358  cat sip.conf 
+ 1359  sudo sngrep
+ 1360  lk sip outbound list
+ 1361  docker ps
+ 1362  cd Livekit/
+ 1363  docker compose restart livekit sip
+ 1364  ls -l
+ 1365  docker compose -f docker-compose.stag.yml restart livekit sip
+ 1366  docker ps
+ 1367  lk sip outbound list
+ 1368  htop
+ 1369  tmux attach -t staging
+ 1370  sudo sngrep
+ 1371  tmux attach -t staging 
+ 1372  cd app/techladder-dialer/
+ 1373  docker ps
+ 1374  docker ps
+ 1375  docker exec -it 50d847b7a2e4 bash 
+ 1376  htop
+ 1377  tmux attach -t staging
+ 1378  docker tail -f d4958eca32d5
+ 1379  docker logs -f d4958eca32d5
+ 1380  docker ps
+ 1381  cd Livekit/
+ 1382  ls -l
+ 1383  docker ps
+ 1384  ls -l
+ 1385  docker rm -f livekit-livekit-1
+ 1386  docker ps
+ 1387  docker compose -f docker-compose.stag.yml up -d livekit
+ 1388  docker ps
+ 1389  docker logs -f 07b5e817202c
+ 1390  docker ps
+ 1391  docker exec -it 9a17e86dfda6 bash 
+ 1392  docker exec -it 9a17e86dfda6 tail -f /app/sqs_logs/worker-main.log
+ 1393  cd app/techladder-dialer/
+ 1394  docker ps
+ 1395  docker exec -it c18c6e136966 bash 
+ 1396  htop
+ 1397  tmux attach -t stag
+ 1398  tmux ls
+ 1399  tmux attach -t staging
+ 1400  cd app/techladder-dialer/
+ 1401  docker ps
+ 1402  git branch 
+ 1403  git log -5 --oneline 
+ 1404  docker ps
+ 1405  tmux attach -t staging 
+ 1406  cd app/techladder-agents/
+ 1407  git branch 
+ 1408  git fetch origin
+ 1409  git stash 
+ 1410  git checkout prod-main2
+ 1411  cd app/techladder-agents/
+ 1412  cd vaarti/
+ 1413  source .venv/bin/activate
+ 1414  python3 post_call_worker.py > post_call.log 2>&1
+ 1415  tmux ls 
+ 1416  tmux kill-session -t post-call
+ 1417  tmux ls 
+ 1418  tmxu attach -t staging-post-call
+ 1419  tmux attach -t staging-post-call
+ 1420  tmux ls 
+ 1421  tmux ls 
+ 1422  tmux new -s post-call
+ 1423  tmux attach -t post-call
+ 1424  htop
+ 1425  tmux attach -t staging 
+ 1426  cd app/techladder-dialer/
+ 1427  git branch 
+ 1428  docker ps
+ 1429  tmux ls 
+ 1430  tmux attach -t staging 
+ 1431  tmux attach -t staging-post-call
+ 1432  tmux attach -t staging 
+ 1433  htop
+ 1434  tmux attach -t stage
+ 1435  tmux attach -t staging
+ 1436  cd app/
+ 1437  cd techladder-agents/
+ 1438  git fetch origin
+ 1439  git checkout stt
+ 1440  tmux attach -t stage-post-call
+ 1441  tmux attach -t staging-post-call
+ 1442  htop
+ 1443  tmux attach -t staging
+ 1444  cd app/techladder-agents/
+ 1445  git checkout staging 
+ 1446  git pull
+ 1447  git checkout sentiment
+ 1448  tmux attach -t staging
+ 1449  tmux attach -t staging-post-call
+ 1450  cd app/techladder-agents/
+ 1451  git pull
+ 1452  git checkout hush-nc
+ 1453  htop
+ 1454  tmux attach -t staging
+ 1455  tmux attach -t staging 
+ 1456  tmux attach -t staging-post-call
+ 1457  tmux attach -t staging 
+ 1458  tmux attach -t staging 
+ 1459  tmux attach -t staging-post-call
+ 1460  cd app/techladder-agents/
+ 1461  git branch 
+ 1462  git checkout staging 
+ 1463  git stash 
+ 1464  git checkout staging 
+ 1465  git pull
+ 1466  tmux ls 
+ 1467  tmux attach -t multiagent
+ 1468  htop
+ 1469  tmux attach -t staging 
+ 1470  tmux attach -t staging-post-call
+ 1471  tmux ls
+ 1472  tmux attach -t staging 
+ 1473  tmux attach -t staging-post-call
+ 1474  tmux attach -t staging
+ 1475  tmux attach -t staging-post-call
+ 1476  lk sip outbound list 
+ 1477  docker ps
+ 1478  docker logs -f 07b5e817202c
+ 1479  cd app/techladder-agents/
+ 1480  cd ..
+ 1481  cd techladder-dialer/
+ 1482  git fetch origin 
+ 1483  git checkout multi-agent-telephony
+ 1484  docker ps
+ 1485  docker stop techladder-dialer-staging
+ 1486  docker rm techladder-dialer-staging
+ 1487  docker build -t techladder-dialer-staging .
+ 1488  docker run -d --env-file .env.stage --network host --name techladder-dialer-staging techladder-dialer-staging:latest
+ 1489  docker ps
+ 1490  docker exec -it a6a1c1c878bc bash
+ 1491  lk sip participant create   --trunk ST_nuP6zgAmfZTz   --to-user "+919877094930"   --room "trunk-test-$(date +%s)"   --identity "manual-test"   --wait-until-answered
+ 1492  lk sip participant create --request '{
+ 1493    "sip_trunk_id": "ST_nuP6zgAmfZTz",
+ 1494    "sip_call_to": "+919877094930",
+ 1495    "room_name": "trunk-test-1",
+ 1496    "participant_identity": "manual-test",
+ 1497    "wait_until_answered": true
+ 1498  }'
+ 1499  # Find the right flags first
+ 1500  lk sip participant create --help
+ 1501  lk sip participant create   --trunk ST_nuP6zgAmfZTz   --call "+919877094930"   --room "trunk-test-$(date +%s)"   --identity "manual-test"   --wait
+ 1502  # Try 91 prefix without plus
+ 1503  lk sip participant create --trunk ST_nuP6zgAmfZTz --call "919877094930" --room "trunk-test-1" --identity "manual-test" --wait
+ 1504  # Try with leading zero (some Indian carriers want this)
+ 1505  lk sip participant create --trunk ST_nuP6zgAmfZTz --call "09877094930" --room "trunk-test-2" --identity "manual-test" --wait
+ 1506  sudo sngrep
+ 1507  tmux attach -t staging-post-call
+ 1508  tmux attach -t staging 
+ 1509  cd app/techladder-agents/
+ 1510  git pull\
+ 1511  git pull
+ 1512  clear
+ 1513  ls
+ 1514  cd app/
+ 1515  lk sip out list
+ 1516  clear
+ 1517  ls
+ 1518  clear
+ 1519  ls
+ 1520  cd techladder-agents/
+ 1521  ls
+ 1522  clear
+ 1523  docker ps
+ 1524  tmux ls
+ 1525  tmux attach -t staging
+ 1526  ls
+ 1527  cd vaarti/
+ 1528  ls
+ 1529  cat logs.log 
+ 1530  clear
+ 1531  ls
+ 1532  clear
+ 1533  ls
+ 1534  clear
+ 1535  ls
+ 1536  sudo nano .env.start 
+ 1537  lk sip out list
+ 1538  sudo nano .env.start 
+ 1539  clear
+ 1540  ls
+ 1541  tmux ls
+ 1542  tmux attach -t staging
+ 1543  clear
+ 1544  sudo sngrep
+ 1545  clea
+ 1546  clear
+ 1547  tmux attach -t staging 
+ 1548  tmux attach -t staging-post-call
+ 1549  cd app/techladder-
+ 1550  cd app/techladder-dialer/
+ 1551  docker ps
+ 1552  git checkout mat2
+ 1553  git fetech origin
+ 1554  git fetch origin
+ 1555  gti checkout mat2
+ 1556  git checkout mat2
+ 1557  git pull
+ 1558  docker stop techladder-dialer-staging
+ 1559  docker rm techladder-dialer-staging
+ 1560  docker build -t techladder-dialer-staging .
+ 1561  docker run -d --env-file .env.stage --network host --name techladder-dialer-staging techladder-dialer-staging:latest
+ 1562  sudo sngrep
+ 1563  tmux ls
+ 1564  tmux attach -t staging
+ 1565  tmux ls
+ 1566  tmux attach -t staging
+ 1567  tmux ls
+ 1568  cd staging-post-call
+ 1569  tmux attach -t
+ 1570  tmux attach -t staging-post-call
+ 1571  tmux attach -t staging
+ 1572  cd app/techladder-agents/
+ 1573  git branch 
+ 1574  git pull
+ 1575  lk sip out list
+ 1576  clear
+ 1577  tmux ls
+ 1578  tmux attach -t staging
+ 1579  clear
+ 1580  sudo sngrep
+ 1581  ls
+ 1582  tmux ls
+ 1583  tmux attach -t staging
+ 1584  tmux ls
+ 1585  tmux attach -t staging
+ 1586  clear
+ 1587  ls
+ 1588  cd app/
+ 1589  techladder-agents/
+ 1590  ls
+ 1591  clear
+ 1592  ls
+ 1593  cd techladder-agents/
+ 1594  ls
+ 1595  clear
+ 1596  git status
+ 1597  clear
+ 1598  git status
+ 1599  clear
+ 1600  git status
+ 1601  clear
+ 1602  git branch
+ 1603  clear
+ 1604  tmux attach -t staging 
+ 1605  tmux attach -t staging-post-call
+ 1606  source .venv/bin/activate
+ 1607  python3 main.py start > logs.log 2>&1
+ 1608  cd /home/ubuntu/app/techladder-agents/vaarti
+ 1609  source .venv/bin/activate && python3 main.py start > logs.log 2>&1
+ 1610  cd /home/ubuntu/app/techladder-agents/vaarti
+ 1611  source .venv/bin/activate
+ 1612  python3 main.py start > logs.log 2>&1
+ 1613  cd /home/ubuntu/app/techladder-agents/vaarti
+ 1614  source .venv/bin/activate
+ 1615  python3 main.py start > logs.log 2>&1
+ 1616  git fetch
+ 1617  git fetch origin
+ 1618  git checkout noise-c
+ 1619  git log -1 --oneline
+ 1620  curl -L -o agent_runtime/models/hush/libweya_nc.so   https://github.com/pulp-vision/Hush/releases/download/v1.0.0/libweya_nc.so
+ 1621  curl -L -o agent_runtime/models/hush/advanced_dfnet16k_model_best_onnx.tar.gz   https://huggingface.co/weya-ai/hush/resolve/main/onnx/advanced_dfnet16k_model_best_onnx.tar.gz
+ 1622  chmod 755 agent_runtime/models/hush/libweya_nc.so
+ 1623  chmod 644 agent_runtime/models/hush/advanced_dfnet16k_model_best_onnx.tar.gz
+ 1624  cd /home/ubuntu/app/techladder-agents/vaarti/agent_runtime/models/hush
+ 1625  rm -f libweya_nc.so
+ 1626  # best: use gh so asset name is exact
+ 1627  gh release view v1.0.0 -R pulp-vision/Hush --json assets --jq '.assets[].name'
+ 1628  gh release download v1.0.0 -R pulp-vision/Hush   -p 'libweya_nc.so'   -D .
+ 1629  chmod 755 libweya_nc.so
+ 1630  file libweya_nc.so
+ 1631  cd /home/ubuntu/app/techladder-agents/vaarti/agent_runtime/models/hush
+ 1632  curl -fsSL https://api.github.com/repos/pulp-vision/Hush/releases/tags/v1.0.0   | python3 -c "import sys,json; d=json.load(sys.stdin); [print(a['name'], '=>', a['browser_download_url']) for a in d.get('assets', [])]"
+ 1633  ls -l
+ 1634  tar -xvzf advanced_dfnet16k_model_best_onnx.tar.gz
+ 1635  tar -tf advanced_dfnet16k_model_best_onnx.tar.gz | grep -E 'libweya|weya_nc|\.so|\.dll|\.dylib'
+ 1636  curl -fL -o libweya_nc.so   https://raw.githubusercontent.com/pulp-vision/Hush/main/deployment/lib/libweya_nc.so
+ 1637  curl -fL -o advanced_dfnet16k_model_best_onnx.tar.gz   https://raw.githubusercontent.com/pulp-vision/Hush/main/deployment/models/advanced_dfnet16k_model_best_onnx.tar.gz
+ 1638  chmod 755 libweya_nc.so
+ 1639  chmod 644 advanced_dfnet16k_model_best_onnx.tar.gz
+ 1640  file libweya_nc.so
+ 1641  tar -tf advanced_dfnet16k_model_best_onnx.tar.gz
+ 1642  ls -l
+ 1643  cd ..
+ 1644  python3 main.py start > logs.log 2>&1
+ 1645  cd /home/ubuntu/app/techladder-agents/vaarti
+ 1646  source .venv/bin/activate
+ 1647  python3 main.py start > logs.log 2>&1
+ 1648  git fetch origin
+ 1649  git stash
+ 1650  git checkout sip-entry
+ 1651  python3 main.py start > logs.log 2>&1
+ 1652  git branch
+ 1653  git fetch
+ 1654  git branch
+ 1655  python3 main.py start > logs.log 2>&1
+ 1656  git stash 
+ 1657  git checkout staging 
+ 1658  git pull
+ 1659  python3 main.py start > logs.log 2>&1
+ 1660  git stash 
+ 1661  git checkout callpromptfix
+ 1662  git log -1 --oneline 
+ 1663  python3 main.py start > logs.log 2>&1
+ 1664  git fetch origin
+ 1665  git stash
+ 1666  git checkout sip-entry
+ 1667  python3 main.py start > logs.log 2>&1
+ 1668  cd /home/ubuntu/app/techladder-agents/vaarti
+ 1669  source .venv/bin/activate
+ 1670  python3 main.py start > logs.log 2>&1
+ 1671  cd /home/ubuntu/app/techladder-agents/vaarti
+ 1672  source .venv/bin/activate
+ 1673  python3 main.py start > logs.log 2>&1
+ 1674  cd /home/ubuntu/app/techladder-agents/vaarti
+ 1675  source .venv/bin/activate
+ 1676  python3 main.py start > logs.log 2>&1
+ 1677  cd /home/ubuntu/app/techladder-agents/vaarti
+ 1678  source .venv/bin/activate
+ 1679  python3 main.py start > logs.log 2>&1
+ 1680  cd /home/ubuntu/app/techladder-agents/vaarti
+ 1681  source .venv/bin/activate
+ 1682  python3 main.py start > logs.log 2>&1
+ 1683  cd /home/ubuntu/app/techladder-agents/vaarti
+ 1684  source .venv/bin/activate
+ 1685  python3 main.py start > logs.log 2>&1
+ 1686  git fetch origin
+ 1687  git checkout post-call-allnew
+ 1688  python3 main.py start > logs.log 2>&1
+ 1689  pip install "livekit-agents[turn-detector]~=1.5"
+ 1690  python3 main.py start > logs.log 2>&1
+ 1691  python3 main.py download-files
+ 1692  python3 main.py start > logs.log 2>&1
+ 1693  git stash 
+ 1694  git pull
+ 1695  python3 main.py start > logs.log 2>&1
+ 1696  git pull
+ 1697  python3 main.py start > logs.log 2>&1
+ 1698  git pull
+ 1699  python3 main.py start > logs.log 2>&1
+ 1700  git stash 
+ 1701  git pull
+ 1702  python3 main.py start > logs.log 2>&1
+ 1703  git stash 
+ 1704  git fetch origin
+ 1705  git checkout 45second
+ 1706  git pull
+ 1707  python3 main.py start > logs.log 2>&1
+ 1708  git pull
+ 1709  python3 main.py start > logs.log 2>&1
+ 1710  cd /home/ubuntu/app/techladder-agents/vaarti
+ 1711  source .venv/bin/activate
+ 1712  python3 main.py start > logs.log 2>&1
+ 1713  git branch 
+ 1714  git fetch origin
+ 1715  git chekcout word-capture
+ 1716  git checkout word-capture
+ 1717  git pull
+ 1718  python3 main.py start > logs.log 2>&1
+ 1719  git stash 
+ 1720  git pull
+ 1721  python3 main.py start > logs.log 2>&1
+ 1722  pip install torch --index-url https://download.pytorch.org/whl/cpu
+ 1723  python3 main.py start > logs.log 2>&1
+ 1724  git stash 
+ 1725  git pull
+ 1726  python3 main.py start > logs.log 2>&1
+ 1727  git fetch origin 
+ 1728  git checkout speech
+ 1729  python3 main.py start > logs.log 2>&1
+ 1730  git pull
+ 1731  python3 main.py start > logs.log 2>&1
+ 1732  git stash
+ 1733  git pull
+ 1734  git fetch orign 
+ 1735  git fetch origin 
+ 1736  git checkout ind-post-call
+ 1737  python3 main.py start > logs.log 2>&1
+ 1738  git pull
+ 1739  python3 main.py start > logs.log 2>&1
+ 1740  cd /home/ubuntu/app/techladder-agents/vaarti
+ 1741  source .venv/bin/activate
+ 1742  python3 main.py start > logs.log 2>&1
+ 1743  python3 main.py download-files
+ 1744  python3 main.py start > logs.log 2>&1
+ 1745  cd /home/ubuntu/app/techladder-agents/vaarti
+ 1746  source .venv/bin/activate
+ 1747  python3 main.py start > logs.log 2>&1
+ 1748  git pull
+ 1749  python3 main.py start > logs.log 2>&1
+ 1750  cd /home/ubuntu/app/techladder-agents/vaarti
+ 1751  source .venv/bin/activate
+ 1752  python3 main.py start > logs.log 2>&1
+ 1753  cd /home/ubuntu/app/techladder-agents/vaarti
+ 1754  source .venv/bin/activate
+ 1755  python3 main.py start > logs.log 2>&1
+ 1756  cd /home/ubuntu/app/techladder-agents/vaarti
+ 1757  source .venv/bin/activate
+ 1758  python3 main.py start > logs.log 2>&1
+ 1759  python3 main.py download-files
+ 1760  python3 main.py start > logs.log 2>&1
+ 1761  git pull
+ 1762  python3 main.py start > logs.log 2>&1
+ 1763  git pull
+ 1764  python3 main.py start > logs.log 2>&1
+ 1765  cd /home/ubuntu/app/techladder-agents/vaarti
+ 1766  source .venv/bin/activate
+ 1767  python3 main.py start > logs.log 2>&1
+ 1768  python3 main.py download-files
+ 1769  python3 main.py start > logs.log 2>&1
+ 1770  pip install fasttext
+ 1771  python3 main.py start > logs.log 2>&1
+ 1772  cd /home/ubuntu/app/techladder-agents/vaarti
+ 1773  source .venv/bin/activate
+ 1774  python3 main.py start > logs.log 2>&1
+ 1775  pip install faster-whisper
+ 1776  python3 main.py start > logs.log 2>&1
+ 1777  git pull
+ 1778  python3 main.py start > logs.log 2>&1
+ 1779  git fetch orign
+ 1780  git fetch origin
+ 1781  git stash
+ 1782  uv sync
+ 1783  pip install -r requirements.txt 
+ 1784  pip3 install -r requirements.txt 
+ 1785  python3 main.py start > logs.log 2>&1
+ 1786  pip install -r requirements.txt
+ 1787  uv sync
+ 1788  sudo snap install astral-uv
+ 1789  cd /home/ubuntu/app/techladder-agents/vaarti
+ 1790  # 1. Install Python 3.12 if it's not on the box
+ 1791  sudo apt-get update
+ 1792  sudo apt-get install -y python3.12 python3.12-venv python3.12-dev
+ 1793  # 2. Throw away the 3.14 venv
+ 1794  deactivate 2>/dev/null
+ 1795  rm -rf .venv
+ 1796  # 3. Make a fresh 3.12 venv
+ 1797  python3.12 -m venv .venv
+ 1798  source .venv/bin/activate
+ 1799  python --version    # should print Python 3.12.x
+ 1800  # 4. Install everything
+ 1801  pip install --upgrade pip
+ 1802  pip install -r requirements.txt
+ 1803  # 1. Add the PPA
+ 1804  sudo apt-get install -y software-properties-common
+ 1805  sudo add-apt-repository -y ppa:deadsnakes/ppa
+ 1806  sudo apt-get update
+ 1807  # 2. Install Python 3.12
+ 1808  sudo apt-get install -y python3.12 python3.12-venv python3.12-dev
+ 1809  # 3. Confirm it's there
+ 1810  python3.12 --version
+ 1811  # Should print: Python 3.12.x
+ 1812  cd /home/ubuntu/app/techladder-agents/vaarti
+ 1813  python3.12 -m venv .venv
+ 1814  source .venv/bin/activate
+ 1815  python --version    # confirm Python 3.12.x
+ 1816  pip install --upgrade pip
+ 1817  pip install -r requirements.txt
+ 1818  # 1. Add deadsnakes PPA (gives you older Python versions on Ubuntu)
+ 1819  sudo apt-get install -y software-properties-common
+ 1820  sudo add-apt-repository -y ppa:deadsnakes/ppa
+ 1821  sudo apt-get update
+ 1822  # 2. Install Python 3.12
+ 1823  sudo apt-get install -y python3.12 python3.12-venv python3.12-dev
+ 1824  # 3. Verify it's there before going further
+ 1825  which python3.12
+ 1826  python3.12 --version
+ 1827  # 1. Install build prerequisites (so pyenv can compile Python)
+ 1828  sudo apt-get install -y build-essential libssl-dev zlib1g-dev libbz2-dev     libreadline-dev libsqlite3-dev libncurses-dev libffi-dev liblzma-dev     libxml2-dev libxmlsec1-dev tk-dev curl git
+ 1829  # 2. Install pyenv
+ 1830  curl https://pyenv.run | bash
+ 1831  # 3. Wire pyenv into your shell
+ 1832  cat >> ~/.bashrc <<'EOF'
+ 1833  # pyenv
+ 1834  export PYENV_ROOT="$HOME/.pyenv"
+ 1835  [ -d "$PYENV_ROOT/bin" ] && export PATH="$PYENV_ROOT/bin:$PATH"
+ 1836  eval "$(pyenv init - bash)"
+ 1837  EOF
+ 1838  source ~/.bashrc
+ 1839  # 4. Confirm pyenv is on PATH
+ 1840  pyenv --version
+ 1841  # Should print: pyenv 2.x.x
+ 1842  cd /home/ubuntu/app/techladder-agents/vaarti
+ 1843  pyenv local 3.12.7        # pins this directory to 3.12.7
+ 1844  python --version          # must print Python 3.12.7
+ 1845  python -m venv .venv
+ 1846  source .venv/bin/activate
+ 1847  python --version          # confirm Python 3.12.7 inside the venv
+ 1848  pip install --upgrade pip
+ 1849  pip install -r requirements.txt
+ 1850  pyenv install 3.12.7
+ 1851  cd /home/ubuntu/app/techladder-agents/vaarti
+ 1852  pyenv local 3.12.7
+ 1853  python --version          # should now print Python 3.12.7
+ 1854  python -m venv .venv
+ 1855  source .venv/bin/activate
+ 1856  pip install --upgrade pip
+ 1857  pip install -r requirements.txt
+ 1858  python main.py start > logs.log 2>&1
+ 1859  pip install googlemaps
+ 1860  python main.py start > logs.log 2>&1
+ 1861  git stash 
+ 1862  git pull
+ 1863  python main.py start > logs.log 2>&1
+ 1864  git pull
+ 1865  python main.py start > logs.log 2>&1
+ 1866  git pull
+ 1867  python main.py start > logs.log 2>&1
+ 1868  git pull
+ 1869  python main.py start > logs.log 2>&1
+ 1870  git pull
+ 1871  python main.py start > logs.log 2>&1
+ 1872  git pull
+ 1873  python main.py start > logs.log 2>&1
+ 1874  git pull
+ 1875  python main.py start > logs.log 2>&1
+ 1876  git checkout staging 
+ 1877  python main.py start > logs.log 2>&1
+ 1878  git checkout multi-agent-telephony
+ 1879  python main.py start > logs.log 2>&1
+ 1880  git pull
+ 1881  python main.py start > logs.log 2>&1
+ 1882  git stash 
+ 1883  git pull
+ 1884  git checkout mat2
+ 1885  python main.py start > logs.log 2>&1
+ 1886  python3 main.py start > logs.log 2>&1
+ 1887  git pull
+ 1888  python3 main.py start > logs.log 2>&1
+ 1889  git pull
+ 1890  python3 main.py start > logs.log 2>&1
+ 1891  git brancj
+ 1892  clear
+ 1893  git status
+ 1894  clear
+ 1895  git status
+ 1896  clear
+ 1897  python3 main.py start > logs.log 2>&1
+ 1898  git branch
+ 1899  python3 main.py start > logs.log 2>&1
+ 1900  git branch
+ 1901  git remote update
+ 1902  git checkout feat/human_escalation
+ 1903  python3 main.py start > logs.log 2>&1
+ 1904  clear
+ 1905  python3 main.py start > logs.log 2>&1
+ 1906  ls
+ 1907  python3 main.py start > logs.log 2>&1
+ 1908  clear
+ 1909  python3 main.py start > logs.log 2>&1
+ 1910  clear
+ 1911  python3 main.py start > logs.log 2>&1
+ 1912  git stash 
+ 1913  git pull
+ 1914  git checkout mat2
+ 1915  git pull
+ 1916  python3 main.py start > logs.log 2>&1
+ 1917  git pull
+ 1918  python3 main.py start > logs.log 2>&1
+ 1919  git stash
+ 1920  git fetch origin
+ 1921  git checkout mat2-sarvam-lang-detect
+ 1922  python3 main.py start > logs.log 2>&1
+ 1923  git pull
+ 1924  python3 main.py start > logs.log 2>&1
+ 1925  lk room list
+ 1926  docker ps
+ 1927  cd Trunks/
+ 1928  lk sip participant create sip-participant.json 
+ 1929  lk sip room list
+ 1930  lk agent dispatch create --agent-name my-telephony-agent --room my-livekit-room-1
+ 1931  lk agent dispatch create   --agent-name my-telephony-agent   --room my-livekit-room-1
+ 1932  lk agent --help
+ 1933  lk dispatch create   --agent-name my-telephony-agent   --room my-livekit-room-1
+ 1934  lk sip room list
+ 1935  lk room lsit
+ 1936  lk room list
+ 1937  lk dispatch create   --agent-name my-telephony-agent   --room my-livekit-room-1
+ 1938  lk sip participant create sip-participant.json 
+ 1939  lk dispatch create   --agent-name my-telephony-agent   --room my-livekit-room-1
+ 1940  export LIVEKIT_API_KEY=APIAanlkjablp
+ 1941  export LIVEKIT_API_SECRET=afedCoavKLbrEWfshCvPvdaiykdfpADTF96W3kjash
+ 1942  export LIVEKIT_URL=wss://tel.staging.techladder.ai
+ 1943  lk dispatch create   --agent-name my-telephony-agent   --room my-livekit-room-1
+ 1944  lk room list
+ 1945  lk sip participant create sip-participant.json 
+ 1946  lk room list
+ 1947  lk dispatch create   --agent-name my-telephony-agent   --room my-livekit-room-1
+ 1948  docker ps
+ 1949  docker logs -f livekit-livekit-1 
+ 1950  cd app/worker-test/
+ 1951  docker exec -it techladder-dialer-staging-dialer-1 tail -f "/app/sqs_logs/scheduler-main.log" >> listner-main.log
+ 1952  cd app/techladder-agents/
+ 1953  cd vaarti/
+ 1954  source .venv/bin/activate
+ 1955  sudo apt update
+ 1956  sudo apt install libc++1 libc++abi1  
+ 1957  pip install ten_vad
+ 1958  git staths
+ 1959  git status
+ 1960  git stash
+ 1961  tmux attach -t vaarti
+ 1962  tmux ls
+ 1963  tmux attach -t staging
+ 1964  docker ps
+ 1965  cd ..
+ 1966  cd ,,
+ 1967  cd ..
+ 1968  mkdir worker-test
+ 1969  cd worker-test/
+ 1970  docker ps
+ 1971  docker exec -it techladder-dialer-staging-dialer-1 tail -f "/app/sqs_logs/worker-scheduled.log"
+ 1972  docker exec -it techladder-dialer-staging-dialer-1 tail -f "/app/sqs_logs/worker-scheduled.log" >> worker-main.log
+ 1973  docker exec -it techladder-dialer-staging-dialer-1 tail -f "/app/sqs_logs/worker-main.log" >> worker-main.log
+ 1974  htop
+ 1975  tmux attach -t staging
+ 1976  tmux kill-session -t staging
+ 1977  tmux ls 
+ 1978  tmux new -s staging
+ 1979  sudo pkill -9 sngrep
+ 1980  htop
+ 1981  cd app/techladder-agents/
+ 1982  cd vaarti/
+ 1983  source .venv/bin/activate
+ 1984  python3 main.py start > logs.log 2>&1
+ 1985  git checkout mat2-log-lang
+ 1986  python3 main.py start > logs.log 2>&1
+ 1987  git stash 
+ 1988  python3 main.py start > logs.log 2>&1
+ 1989  clear
+ 1990  python3 main.py start > logs.log 2>&1
+ 1991  git pull
+ 1992  python3 main.py start > logs.log 2>&1
+ 1993  git pull
+ 1994  python3 main.py start > logs.log 2>&1
+ 1995  clear
+ 1996  python3 main.py start > logs.log 2>&1
+ 1997  cd /home/ubuntu/app/techladder-agents/vaarti
+ 1998  source .venv/bin/activate
+ 1999  python3 main.py start > logs.log 2>&1
+ 2000  cd /home/ubuntu/app/techladder-agents/vaarti
+ 2001  source .venv/bin/activate
+ 2002  python3 main.py start > logs.log 2>&1
+ 2003  history 500
+ 2004  tmux capture-pane -pS -32768 > ~/output.txt
+ 2005  history 2000 > ~/history.txt
+ 2006  history 2000 > history.txt
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+cd /home/ubuntu/app/techladder-agents/vaarti
+source .venv/bin/activate
+python3 main.py start > logs.log 2>&1
+python main.py start > logs.log 2>&1
+python3 main.py download-files
+python main.py download-files
+
+git fetch
+git fetch origin
+git remote update
+git stash
+git pull
+git status
+git branch
+git checkout sip-entry
+git checkout staging
+git checkout callpromptfix
+git checkout post-call-allnew
+git checkout 45second
+git checkout word-capture
+git checkout speech
+git checkout ind-post-call
+git checkout multi-agent-telephony
+git checkout mat2
+git checkout feat/human_escalation
+git checkout mat2-sarvam-lang-detect
+git checkout mat2-log-lang
+git log -1 --oneline
+
+uv sync
+
+pip install "livekit-agents[turn-detector]~=1.5"
+pip install torch --index-url https://download.pytorch.org/whl/cpu
+pip install fasttext
+pip install faster-whisper
+pip install googlemaps
+pip install ten_vad
+pip install -r requirements.txt
+pip3 install -r requirements.txt
+pip install --upgrade pip
+
+sudo snap install astral-uv
+
+sudo apt-get update
+sudo apt-get install -y python3.12 python3.12-venv python3.12-dev
+sudo apt-get install -y software-properties-common
+sudo add-apt-repository -y ppa:deadsnakes/ppa
+sudo apt-get install -y build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev libncurses-dev libffi-dev liblzma-dev libxml2-dev libxmlsec1-dev tk-dev curl git
+sudo apt update
+sudo apt install libc++1 libc++abi1
+
+deactivate 2>/dev/null
+rm -rf .venv
+
+python3.12 -m venv .venv
+python -m venv .venv
+
+python --version
+python3.12 --version
+which python3.12
+
+curl https://pyenv.run | bash
+source ~/.bashrc
+pyenv --version
+pyenv install 3.12.7
+pyenv local 3.12.7
+
+cat >> ~/.bashrc <<'EOF'
+
+lk room list
+lk sip participant create sip-participant.json
+lk agent dispatch create --agent-name my-telephony-agent --room my-livekit-room-1
+lk dispatch create --agent-name my-telephony-agent --room my-livekit-room-1
+lk agent --help
+
+export LIVEKIT_API_KEY=...
+export LIVEKIT_API_SECRET=...
+export LIVEKIT_URL=...
+
+docker ps
+docker logs -f livekit-livekit-1
+docker exec -it techladder-dialer-staging-dialer-1 tail -f "/app/sqs_logs/scheduler-main.log"
+docker exec -it techladder-dialer-staging-dialer-1 tail -f "/app/sqs_logs/worker-scheduled.log"
+docker exec -it techladder-dialer-staging-dialer-1 tail -f "/app/sqs_logs/worker-main.log"
+
+tmux ls
+tmux attach -t vaarti
+tmux attach -t staging
+tmux kill-session -t staging
+tmux new -s staging
+
+sudo pkill -9 sngrep
+
+htop
+clear
+ls
+
+cd ..
+mkdir worker-test
+cd worker-test/
+cd Trunks/
+cd app/worker-test/
+cd app/techladder-agents/
+
+history 500
+history 2000 > ~/history.txt
+history 2000 > history.txt
+
+tmux capture-pane -pS -32768 > ~/output.txt
